@@ -15,6 +15,7 @@ for i=1:numPoints
     [x, y] = randPointFromDisk(r1);
     
     %% Classify where the points lie
+    % FIXME fix the rgb/group labels
     % Check if the point lies above or below the x axis
     r = sqrt(x^2+y^2);
     if(y >= 0)
