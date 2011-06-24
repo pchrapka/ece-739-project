@@ -1,6 +1,8 @@
 function [x,y] = randPointFromDisk( diameter )
-%RANDPOINTFROMDISK Summary of this function goes here
-%   Detailed explanation goes here
+%RANDPOINTFROMDISK Generates a random point from a disk with uniform
+%distribution
+%   [X,Y] = RANDPOINTFROMDISK(DIAMETER) returns the x and y coordinates of
+%   a random point uniformly distributed within a disk of diameter DIAMETER
 
 d = 1;
 r = rand(1)*d;
