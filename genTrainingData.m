@@ -1,4 +1,4 @@
-function [ training, group ] = genTrainingData( numPoints )
+function [ point, groupName ] = genTrainingData( numPoints )
 %GENTRAININGDATA Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -9,7 +9,9 @@ r1 = 1;
 
 % Preallocate memory
 point = zeros(numPoints,2);
-group = zeros(numPoints,3);
+% groupName = zeros(numPoints,3);
+% groupName = zeros(numPoints,1);
+groupName = cell(numPoints,1);
 for i=1:numPoints
     %% Generate random points within the disk
     [x, y] = randPointFromDisk(r1);
@@ -21,33 +23,42 @@ for i=1:numPoints
     if(y >= 0)
         if(r >= r2)
             % Outermost ring top
-            group(i,:) = [1 0 0];%'red';
+            %groupName(i) = 1;
+            %groupName(i,:) = [1 0 0];%'red';
+            groupName{i} = 'red';
         elseif(r >= r3)
             % Middle ring top
-            group(i,:) = [0 1 0];%'black';
+            %group(i) = 0;
+            %group(i,:) = [0 1 0];%'black';
+            groupName{i} = 'black';
         else
             % Inner ring top
-            group(i,:) = [1 0 0];%'red';
+            %groupName(i) = 1;
+            %groupName(i,:) = [1 0 0];%'red';
+            groupName{i} = 'red';
         end
     else
         if(r >= r2)
             % Outermost ring bottom
-            group(i,:) = [0 1 0];%'black';
+            %groupName(i) = 0;
+            %groupName(i,:) = [0 1 0];%'black';
+            groupName{i} = 'black';
         elseif(r >= r3)
             % Middle ring bottom
-            group(i,:) = [1 0 0];%'red';
+            %groupName(i) = 1;
+            %groupName(i,:) = [1 0 0];%'red';
+            groupName{i} = 'red';
         else
             % Inner ring bottom
-            group(i,:) = [0 1 0];%'black';
+            %groupName(i) = 0;
+            %groupName(i,:) = [0 1 0];%'black';
+            groupName{i} = 'black';
         end
     end
         
     point(i,1) = x;
     point(i,2) = y;
 end
-
-training = point;
-
 
 end
 
