@@ -4,8 +4,7 @@ function [x,y] = randPointFromDisk( diameter )
 %   [X,Y] = RANDPOINTFROMDISK(DIAMETER) returns the x and y coordinates of
 %   a random point uniformly distributed within a disk of diameter DIAMETER
 
-d = 1;
-r = rand(1)*d;
+r = rand(1)*diameter;
 theta = rand(1)*2*pi;
 
 x = sqrt(r)*cos(theta);

@@ -1,5 +1,5 @@
 numPoints = 2000;
-diameter = 1;
+diameter = 0.8;
 % point = zeros(numPoints,2);
 
 for i=1:numPoints

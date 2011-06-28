@@ -6,6 +6,7 @@ close all;
 startTime = datestr(now);
 
 % Specify how many data points to generate
+boxConstraintValue = 500;
 numPoints = 5000;
 % Generate the training and test data
 [points, groupName] = genTrainingData(numPoints);
@@ -29,7 +30,7 @@ try
     startTime1 = datestr(now);
     svmStruct = svmtrain(points(train,:),groups(train),...
         'Kernel_Function','rbf','Method','QP',...
-        'QuadProg_Opts',options);
+        'QuadProg_Opts',options,'BoxConstraint',boxConstraintValue);
     endTime1 = datestr(now);
 catch exception
     % Display the exception
@@ -42,7 +43,7 @@ catch exception
         startTime2 = datestr(now);
         svmStruct = svmtrain(points(train,:),groups(train),...
             'Kernel_Function','rbf','Method','QP',...
-            'QuadProg_Opts',options);
+            'QuadProg_Opts',options,'BoxConstraint',boxConstraintValue);
         endTime2 = datestr(now);
     catch exception
         % Display the exception
