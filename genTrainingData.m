@@ -5,7 +5,7 @@ function [ point, groupName ] = genTrainingData( numPoints )
 r3 = 0.2;
 r2 = 0.5;
 % Largest diameter
-r1 = 1;
+r1 = 0.8;
 
 % Preallocate memory
 point = zeros(numPoints,2);
