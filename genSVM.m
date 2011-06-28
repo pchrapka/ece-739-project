@@ -19,7 +19,8 @@ groups = ismember(groupName,'red');
 % Initialize the class performance object with the correct classification
 cp = classperf(groups);
 % Set optimization options
-maxIterations = 200;
+% Set the max number of iterations to 20000
+maxIterations = 20000;
 options = optimset('quadprog');
 options = optimset(options,...
     'MaxIter',maxIterations,...
@@ -30,35 +31,28 @@ try
     disp('Training...');
     startTime1 = datestr(now);
     svmStruct = svmtrain(points(train,:),groups(train),...
-        'Kernel_FUnction','rbf','Method','QP',...
+        'Kernel_Function','rbf','Method','QP',...
         'QuadProg_Opts',options);
     endTime1 = datestr(now);
 catch exception
     % Display the exception
     disp(exception);
-    % Try again
+    % Try again, double the iterations
     maxIterations = maxIterations*10;
     options = optimset(options,'MaxIter',maxIterations);
     try 
         disp('Training Take 2...');
         startTime2 = datestr(now);
         svmStruct = svmtrain(points(train,:),groups(train),...
-            'Kernel_FUnction','rbf','Method','QP',...
+            'Kernel_Function','rbf','Method','QP',...
             'QuadProg_Opts',options);
         endTime2 = datestr(now);
     catch exception
         % Display the exception
         disp(exception);
-        % Try again
-        maxIterations = maxIterations*10;
-        options = optimset(options,'MaxIter',maxIterations);
-        disp('Training Take 3...');
-        startTime3 = datestr(now);
-        svmStruct = svmtrain(points(train,:),groups(train),...
-            'KERNEL_FUNCTION','rbf','METHOD','QP',...
-            'QUADPROG_OPTS',options);
-        endTime3 = datestr(now);
+        disp('So this does not seem to be working');
     end
+
 end
 
 % Classify the test set
@@ -66,7 +60,7 @@ disp('Classifying...');
 classes = svmclassify(svmStruct,points(test,:));
 % Determine the performance of the classifier
 classperf(cp,classes,test);
-cp.CorrectRate;
+disp(['Performance: ' num2str(cp.CorrectRate*100) '%']);
 
 % Record the end time
 endTime = datestr(now);
