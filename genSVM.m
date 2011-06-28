@@ -22,10 +22,7 @@ cp = classperf(groups);
 % Set the max number of iterations to 20000
 maxIterations = 20000;
 options = optimset('quadprog');
-options = optimset(options,...
-    'MaxIter',maxIterations,...
-    'OutputFcn',@dispIter,...
-    'Display','iter');
+options = optimset(options,'MaxIter',maxIterations);
 % Train the SVM
 try 
     disp('Training...');
