@@ -1,6 +1,6 @@
-n = -5:0.1:5;
-a = tansig(n);
-plot(n,a);
+% n = -5:0.1:5;
+% a = tansig(n);
+% plot(n,a);
 
 %% Initialize variables
 % Number of hidden layers, only 1 as required by Haykin
@@ -16,24 +16,13 @@ numInputs = 2;
 % the other
 numOutputs = 1;
 
-% Create the weight vectors for each input node
-w1 = ones(hiddenLayerSize,1);
-w2 = ones(hiddenLayerSize,1);
+% Create the weight vector
+% One weight for each input to hidden layer connection
+w = ones(hiddenLayerSize,numInputs);
+% w1 = w(:,1);
+% w2 = w(:,2);
 
 x = [0.1; 0.2]; % Sample input vector
-% Evaluate NN
-% TODO put this into a separate function
-% Combine the weight vectors
-w = [w1 w2];
-% Evalute the input for each neuron input = w*x
-% | w11 w21 || x1 |   | w11*x1 + w21*x2 |
-% | w12 w22 || x2 | = | w12*x1 + w22*x2 |
-% | ... ... |         |       ...       |
-% | w1M w2M |         | w1M*x1 + w2M*x2 |
-input = w*x;
-% Apply the tansig function
-out = tansig(input);
-% Sum the output 
-% NOTE The output layer is linear with a weight of 1
-totalOut = sum(out);
+
+totalOut = simMLP(w,x);
 
