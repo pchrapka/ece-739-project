@@ -1,5 +1,7 @@
 function output = simMLP( w,x,numOutputs )
 %SIMMLP TODO Update this help
+%   Assumes one hidden layer and includes weights between the hidden layer
+%   and the output layer as well as biases at each node.
 
 % Evaluates the neural network using the weights and provided input
 %   OUT = SIMNN(W,X)
