@@ -73,7 +73,11 @@ function [theta,P,e]=nnekf(theta,P,x,y,Q,R)
 %
 % By Yi Cao at Cranfield University on 10 January 2008
 %
-
+disp('nnekf');
+disp('size x');
+size(x)
+disp('size y');
+size(y)
 f=@(u)u;                                % dumy process function to update parameters  
 h=@(u)nn(u,x,size(y,1));                % NN model
 [theta,P]=ekf(f,theta,P,h,y(:),Q,R);    % the EKF

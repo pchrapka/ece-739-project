@@ -2,6 +2,8 @@ function output = simMLP( w,x,numOutputs )
 %SIMMLP TODO Update this help
 %   Assumes one hidden layer and includes weights between the hidden layer
 %   and the output layer as well as biases at each node.
+%   Should work with more than one output and multiple samples in x
+%   X should be a number of elements x number of samples matrix
 
 % Evaluates the neural network using the weights and provided input
 %   OUT = SIMNN(W,X)
@@ -25,7 +27,7 @@ function output = simMLP( w,x,numOutputs )
 [numElements, numSamples] = size(x);
 % Determine the number of elements in the weight vector
 numWeights = numel(w);
-% Determine the number of hidden nodes, assuming on hidden layer
+% Determine the number of hidden nodes, assuming one hidden layer
 numHiddenNodes = (numWeights-numOutputs)/(numElements + numOutputs + 1);
 % Extract the first set of weights between the input layer and the hidden
 % layer
