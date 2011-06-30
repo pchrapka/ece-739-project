@@ -2,19 +2,22 @@ close all;
 clc;
 clear all;
 samples = 10;
-Q = linspace(0.001,100,samples);
-R = linspace(0.001,200,samples);
+eta = linspace(0.01,1,samples);
+epsilon = linspace(0.001,0.01,samples);
+q = linspace(1e-6,0.1,samples);
 HN = round(linspace(5,1000,samples));
 
 % NOTE This takes forever
 
-avgPerf = zeros(length(HN),length(Q),length(R));
+avgPerf = zeros(length(HN),length(eta),length(epsilon),length(q));
 for i=1:length(HN)
-    for j=1:length(Q)
-        for k=1:length(R)
-            disp(['HN: ' num2str(HN(i)) ' Q: ' num2str(Q(j)) ' R: ' num2str(R(k))]);
-            avgPerf(i,j,k) = runEKFMLP(50,200, HN(i), Q(j),R(k));
-            disp(['Average performance: ' num2str(avgPerf(i,j,k)*100) '%']);
+    for j=1:length(eta)
+        for k=1:length(epsilon)
+            for l=1:length(q)
+                disp(['HN: ' num2str(HN(i)) ' eta: ' num2str(eta(j)) ' epsilon: ' num2str(epsilon(k)) ' q: ' num2str(q(l))]);
+                avgPerf(i,j,k) = runEKFMLP(50,200, HN(i), eta(j), epsilon(k), q(l), false);
+                disp(['Average performance: ' num2str(avgPerf(i,j,k,l)*100) '%']);
+            end
         end
     end
 end

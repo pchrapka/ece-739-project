@@ -1,11 +1,21 @@
-function [ avgPerf ] = runEKFMLP( epochs, samples, numHiddenNodes, Qweight, Rweight )
+function [ avgPerf ] = runEKFMLP( epochs, samples, numHiddenNodes, eta, epsilon, q, output )
 %RUNEKFMLP Summary of this function goes here
 %   Detailed explanation goes here
+%   q - typically ranges from 0 to 0.1 can be annealed from large number to
+%   a number on the order of 10e-6
+%   epsilon - approx. 0.01 (can range from 0.001 to 0.01)
+%   eta - the learning rate parameter 0.001 to 1
 
 % Output flags
-plotTestEpoch = false;
-plotPerformance = false;
-saveVars = false;
+if(output)
+    plotTestEpoch = true;
+    plotPerformance = true;
+    saveVars = true;
+else
+    plotTestEpoch = false;
+    plotPerformance = false;
+    saveVars = false;
+end
 
 if(mod(epochs,2) ~= 0)
     error('Make the number epochs even');
@@ -35,9 +45,9 @@ end
 % NOTE numWeights assumes one output
 numWeights = numHiddenNodes*(numElements+2) + 1;
 w = randn(numWeights,1);
-P = eye(numWeights);
-Q = Qweight*eye(numWeights);
-R = Rweight*eye(samples);
+P = (1/epsilon)*eye(numWeights);
+Q = q*eye(numWeights);
+R = (1/eta)*eye(samples);
 
 trainEpochs = epochs/2;
 mlpOutput = zeros(epochs,samples);
@@ -62,6 +72,7 @@ saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\P
 
 % Evaluate the performance of the MLP
 startIndex = trainEpochs+1;
+testDataPlot = figure;
 perf = zeros(epochs - startIndex,1);
 for k=startIndex:epochs
     mlpOutput(k,:) = simMLP(w,squeeze(points(k,:,:)),numOutputs);
@@ -92,7 +103,26 @@ for k=startIndex:epochs
         saveas(curFig,[saveFolder filesep 'Classified Data ' num2str(k) '.png']);
         saveas(curFig,[saveFolder filesep 'Classified Data ' num2str(k) '.fig']);
         close(curFig);
+        
+        % Plot each epoch on the common plot
+        % Make the common figure current
+        figure(testDataPlot);
+        scatter(testPoints(1,correct),testPoints(2,correct),...
+            20,colorMat(correct,:),'Marker','+');
+        hold on
+        scatter(testPoints(1,incorrect),testPoints(2,incorrect),...
+            40,colorMat(incorrect,:),'Marker','x');
+        hold on
+        axis square;
     end
+end
+if(plotTestEpoch)
+    % Finish up a few things with the common plot
+    title([{'Classified data'},{'All Test Data'}]);
+    legend('Correct','Incorrect');
+    saveas(testDataPlot,[saveFolder filesep 'All Classified Data' '.png']);
+    saveas(testDataPlot,[saveFolder filesep 'All Classified Data' '.fig']);
+    close(testDataPlot);
 end
 endTime = datestr(now);
 
@@ -111,7 +141,7 @@ avgPerf = sum(perf)/(epochs/2);
 
 if(saveVars)
     dateString = datestr(now,'yyyymmdd_HHMMSS');
-    fileName = ['mlpekf_simulation' dateString '_perf' num2str(avgPerf*100,'%0.2f')];
+    fileName = ['mlpekf_simulation' dateString '_perf' int2str(avgPerf*100)];
     % Save all variables to a file
     save(fileName);
 end
