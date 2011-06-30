@@ -2,6 +2,11 @@ function [ avgPerf ] = runEKFMLP( epochs, samples, numHiddenNodes, Qweight, Rwei
 %RUNEKFMLP Summary of this function goes here
 %   Detailed explanation goes here
 
+% Output flags
+plotTestEpoch = false;
+plotPerformance = false;
+saveVars = false;
+
 if(mod(epochs,2) ~= 0)
     error('Make the number epochs even');
 end
@@ -15,14 +20,15 @@ numElements = 2;
 points = zeros(epochs,numElements,samples);
 groups = zeros(epochs,samples);
 groupName = cell(epochs,samples);
-desiredOutput = ones(epochs,samples);
+desiredOutput = zeros(epochs,samples);
 for k=1:epochs
     % Generate the training and test data
     [points(k,:,:), groupName(k,:)] = genTrainingData(samples);
     % Differentiate the groups
     groups(k,:) = ismember(groupName(k,:),'red');
+    
     % Make red = 0.7 and black = -0.7
-    desiredOutput(k,:) = groups(k,:)*0.7 + (groups(k,:)-1)*-0.7;
+    desiredOutput(k,:) = groups(k,:)*0.7 + (groups(k,:)-1)*0.7;
 end
 
 % Create w, P, W, R, desiredOutput
@@ -71,29 +77,44 @@ for k=startIndex:epochs
     % Record the performance
     perf(k-epochs/2+1,1) = sum(correct)/samples;
     
-    % Plot each epoch
-%     curFig = figure;
-%     scatter(testPoints(1,correct),testPoints(2,correct),...
-%         20,colorMat(correct,:),'Marker','+');
-%     hold on
-%     scatter(testPoints(1,incorrect),testPoints(2,incorrect),...
-%         40,colorMat(incorrect,:),'Marker','x');
-%     hold off
-%     axis square;
-%     title('Classified data');
-%     legend('Correct','Incorrect');
-%     saveas(curFig,[saveFolder filesep 'Classified Data ' num2str(k) '.png']);
-%     saveas(curFig,[saveFolder filesep 'Classified Data ' num2str(k) '.fig']);
-%     close(curFig);
+    if(plotTestEpoch)
+        % Plot each epoch
+        curFig = figure;
+        scatter(testPoints(1,correct),testPoints(2,correct),...
+            20,colorMat(correct,:),'Marker','+');
+        hold on
+        scatter(testPoints(1,incorrect),testPoints(2,incorrect),...
+            40,colorMat(incorrect,:),'Marker','x');
+        hold off
+        axis square;
+        title('Classified data');
+        legend('Correct','Incorrect');
+        saveas(curFig,[saveFolder filesep 'Classified Data ' num2str(k) '.png']);
+        saveas(curFig,[saveFolder filesep 'Classified Data ' num2str(k) '.fig']);
+        close(curFig);
+    end
 end
 endTime = datestr(now);
 
+if(plotPerformance)
+    curFig = figure;
+    plot(perf*100);
+    title('Performance');
+    ylabel('Percent correct');
+    xlabel('Testing epoch');
+    saveas(curFig,[saveFolder filesep 'Performance' '.png']);
+    saveas(curFig,[saveFolder filesep 'Performance' '.fig']);
+    close(curFig);
+end
+
 avgPerf = sum(perf)/(epochs/2);
 
-% dateString = datestr(now,'yyyymmdd_HHMMSS');
-% fileName = ['mlpekf_simulation' dateString];
-% % Save all variables to a file
-% save(fileName);
+if(saveVars)
+    dateString = datestr(now,'yyyymmdd_HHMMSS');
+    fileName = ['mlpekf_simulation' dateString '_perf' num2str(avgPerf*100,'%0.2f')];
+    % Save all variables to a file
+    save(fileName);
+end
 
 
 end
