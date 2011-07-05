@@ -68,7 +68,7 @@ save(fileName);
 %% Plotting rountines
 red = [1 0 0];
 green = [0 1 0];
-saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\Plots';
+saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\SVM';
 
 % Display the training data
 group1ColorTrain = ismember(groups(train),1) * red;

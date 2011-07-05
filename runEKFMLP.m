@@ -72,7 +72,9 @@ saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\P
 
 % Evaluate the performance of the MLP
 startIndex = trainEpochs+1;
-testDataPlot = figure;
+if(plotTestEpoch)
+    testDataPlot = figure;
+end
 perf = zeros(epochs - startIndex,1);
 for k=startIndex:epochs
     mlpOutput(k,:) = simMLP(w,squeeze(points(k,:,:)),numOutputs);

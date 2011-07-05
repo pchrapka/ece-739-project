@@ -15,7 +15,7 @@ for i=1:length(HN)
         for k=1:length(epsilon)
             for l=1:length(q)
                 disp(['HN: ' num2str(HN(i)) ' eta: ' num2str(eta(j)) ' epsilon: ' num2str(epsilon(k)) ' q: ' num2str(q(l))]);
-                avgPerf(i,j,k) = runEKFMLP(50,200, HN(i), eta(j), epsilon(k), q(l), false);
+                avgPerf(i,j,k,l) = runEKFMLP(50,200, HN(i), eta(j), epsilon(k), q(l), false);
                 disp(['Average performance: ' num2str(avgPerf(i,j,k,l)*100) '%']);
             end
         end
