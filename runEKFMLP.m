@@ -27,19 +27,10 @@ numOutputs = 1;
 % numHiddenNodes = 30;
 numElements = 2;
 
-points = zeros(epochs,numElements,samples);
-groups = zeros(epochs,samples);
-groupName = cell(epochs,samples);
-desiredOutput = zeros(epochs,samples);
-for k=1:epochs
-    % Generate the training and test data
-    [points(k,:,:), groupName(k,:)] = genTrainingData(samples);
-    % Differentiate the groups
-    groups(k,:) = ismember(groupName(k,:),'red');
-    
-    % Make red = 0.7 and black = -0.7
-    desiredOutput(k,:) = groups(k,:)*0.7 + (groups(k,:)-1)*0.7;
-end
+% Generate the training data
+[points, groupName] = genTrainingDataMLPEKF(epochs, samples);
+% Get more information about the training data
+[desiredOutput, redPoints, blackPoints] = separateDataMLPEKF(groupName);
 
 % Create w, P, W, R, desiredOutput
 % NOTE numWeights assumes one output
@@ -64,6 +55,19 @@ for k=1:trainEpochs
         squeeze(desiredOutput(k,:)),...
         Q,R );
     
+    % TEMP Debug
+    figure;
+    title(['Training output: Epoch ' num2str(k)]);
+    x = squeeze(points(k,1,:));
+    y = squeeze(points(k,2,:));
+    z = squeeze(mlpOutput(k,:))';
+%     scatter3(x,y,z,10,z);
+    tri = delaunay(x,y);
+    trisurf(tri,x,y,z);
+    hold on
+    axis square;
+%     view(2);
+    
 end
 
 red = [1 0 0];
@@ -74,6 +78,7 @@ saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\P
 startIndex = trainEpochs+1;
 if(plotTestEpoch)
     testDataPlot = figure;
+    tempDebug = figure;
 end
 perf = zeros(epochs - startIndex,1);
 for k=startIndex:epochs
@@ -116,10 +121,21 @@ for k=startIndex:epochs
             40,colorMat(incorrect,:),'Marker','x');
         hold on
         axis square;
+        
+        % TEMP Debug
+        figure(tempDebug);
+        x = squeeze(points(k,1,:));
+        y = squeeze(points(k,2,:));
+        z = squeeze(mlpOutput(k,:))';
+        scatter3(x,y,z,10,z);
+        hold on
+        axis square;
+        view(2);
     end
 end
 if(plotTestEpoch)
     % Finish up a few things with the common plot
+    figure(testDataPlot);
     title([{'Classified data'},{'All Test Data'}]);
     legend('Correct','Incorrect');
     saveas(testDataPlot,[saveFolder filesep 'All Classified Data' '.png']);
