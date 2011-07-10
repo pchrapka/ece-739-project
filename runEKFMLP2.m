@@ -37,7 +37,6 @@ R = (1/eta)*eye(samples);
 
 mlpOutput = zeros(epochs,samples);
 perf = zeros(epochs,1);
-figure;
 for k=1:epochs
     disp(['Training Epoch: ' num2str(k)]);
     wSaved(k,:) = w;
