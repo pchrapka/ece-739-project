@@ -25,7 +25,7 @@ options = optimset(options,'MaxIter',maxIterations);
 try 
     disp('Training...');
     startTime1 = datestr(now);
-    svmStruct = svmtrain(points(train,:),groups(train),...
+    svmStruct = svmtrain(points(:,train),groups(train),...
         'Kernel_Function','rbf','Method','QP',...
         'QuadProg_Opts',options,'BoxConstraint',boxConstraintValue);
     endTime1 = datestr(now);
@@ -38,7 +38,7 @@ catch exception
     try 
         disp('Training Take 2...');
         startTime2 = datestr(now);
-        svmStruct = svmtrain(points(train,:),groups(train),...
+        svmStruct = svmtrain(points(:,train),groups(train),...
             'Kernel_Function','rbf','Method','QP',...
             'QuadProg_Opts',options,'BoxConstraint',boxConstraintValue);
         endTime2 = datestr(now);
@@ -52,7 +52,7 @@ end
 
 % Classify the test set
 disp('Classifying...');
-classes = svmclassify(svmStruct,points(test,:));
+classes = svmclassify(svmStruct,points(:,test));
 % Determine the performance of the classifier
 classperf(cp,classes,test);
 disp(['Performance: ' num2str(cp.CorrectRate*100) '%']);
@@ -68,7 +68,7 @@ save(fileName);
 %% Plotting rountines
 red = [1 0 0];
 green = [0 1 0];
-saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\Plots';
+saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\SVM';
 
 % Display the training data
 group1ColorTrain = ismember(groups(train),1) * red;
@@ -76,7 +76,7 @@ group2ColorTrain = ismember(groups(train),0) * green;
 colorMatTrain = group1ColorTrain + group2ColorTrain;
 % Display classified points on scatter plot
 curFig = figure;
-scatter(points(train,1),points(train,2),20,colorMatTrain);
+scatter(points(1,train),points(2,train),20,colorMatTrain);
 axis square;
 title('Training data');
 saveas(curFig,[saveFolder filesep 'Training Data' '.png']);
@@ -89,7 +89,7 @@ group2ColorTest = ismember(groups(test),0) * green;
 colorMatTest = group1ColorTest + group2ColorTest;
 % Display classified points on scatter plot
 curFig = figure;
-scatter(points(test,1),points(test,2),20,colorMatTest);
+scatter(points(1,test),points(2,test),20,colorMatTest);
 axis square;
 title('Test data with proper labels');
 saveas(curFig,[saveFolder filesep 'Test Data' '.png']);
@@ -99,7 +99,7 @@ close(curFig);
 % Display classified points on scatter plot
 % + is correct
 % x is incorrect
-testPoints = points(test,:);
+testPoints = points(:,test);
 correct = (classes == groups(test));
 incorrect = (classes ~= groups(test));
 
@@ -108,10 +108,10 @@ group2ColorTest1 = ismember(classes,0) * green;
 colorMatTest1 = group1ColorTest1 + group2ColorTest1;
 
 curFig = figure;
-scatter(testPoints(correct,1),testPoints(correct,2),...
+scatter(testPoints(1,correct),testPoints(2,correct),...
     20,colorMatTest1(correct,:),'Marker','+');
 hold on
-scatter(testPoints(incorrect,1),testPoints(incorrect,2),...
+scatter(testPoints(1,incorrect),testPoints(2,incorrect),...
     40,colorMatTest1(incorrect,:),'Marker','x');
 hold off
 axis square;
@@ -123,10 +123,10 @@ close(curFig);
 
 % Display classified points with more emphasis on incorrect data points
 curFig = figure;
-scatter(testPoints(correct,1),testPoints(correct,2),...
+scatter(testPoints(1,correct),testPoints(2,correct),...
     20,colorMatTest1(correct,:),'Marker','.');
 hold on
-scatter(testPoints(incorrect,1),testPoints(incorrect,2),...
+scatter(testPoints(1,incorrect),testPoints(2,incorrect),...
     40,colorMatTest1(incorrect,:),'Marker','x');
 hold off
 axis square;

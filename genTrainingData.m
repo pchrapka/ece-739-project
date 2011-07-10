@@ -8,7 +8,7 @@ r2 = 0.5;
 r1 = 0.8;
 
 % Preallocate memory
-point = zeros(numPoints,2);
+point = zeros(2,numPoints);
 % groupName = zeros(numPoints,3);
 % groupName = zeros(numPoints,1);
 groupName = cell(numPoints,1);
@@ -56,8 +56,8 @@ for i=1:numPoints
         end
     end
         
-    point(i,1) = x;
-    point(i,2) = y;
+    point(1,i) = x;
+    point(2,i) = y;
 end
 
 end
