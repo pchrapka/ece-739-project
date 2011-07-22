@@ -12,9 +12,10 @@ epsilon = linspace(0.001,0.01,samples);
 % q = linspace(1e-6,0.1,samples);
 % HN = round(linspace(5,1000,samples));
 q = 0.001;
+HN = 10:10:100;
 annealingFlag = true;
 perfPlotFlag = false;
-HN = 10:10:100;
+
 saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\EKF MLP';
 
 %% Perform the search

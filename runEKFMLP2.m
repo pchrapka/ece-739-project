@@ -41,7 +41,7 @@ if(useRandom)
 else
     w = initWeights(numWeights);
 end
-wSaved = zeros(epochs,numWeights);
+% wSaved = zeros(epochs,numWeights);
 P = (1/epsilon)*eye(numWeights);
 Q = q*eye(numWeights);
 R = (1/eta)*eye(samples);
@@ -54,10 +54,7 @@ end
 for k=1:epochs
     disp(['Training Epoch: ' num2str(k)]);
     % Save the current set of weights
-    wSaved(k,:) = w;
-    % Randomly select training and test sets
-    % [train, test] = crossvalind('holdOut',groups);
-    % cp = classperf(groups); % Not sure exactly how this works so maybe
+    % wSaved(k,:) = w;
     
     % Train the MLP using the Extended Kalman Filter
     [ w,P,mlpOutput(k,:) ] = trainEKF( ...
