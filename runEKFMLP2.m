@@ -1,6 +1,12 @@
-function [ perf,w ] = runEKFMLP2( epochs, samples, numHiddenNodes, eta, epsilon )
+function [ perf,w ] = runEKFMLP2( epochs, samples, numHiddenNodes, eta, epsilon, q, doAnnealing, plotPerf )
 %RUNEKFMLP2 Summary of this function goes here
 %   Detailed explanation goes here
+
+% OPTIONS
+% Flag to use a random initial weight vector
+% Otherwise loads weights from a file
+useRandom = false;
+% doAnnealing = true; % from args
 
 % Record the starting time
 startTime = datestr(now);
@@ -19,7 +25,8 @@ numOutputs = 1;
 % Network parameters
 % eta = 0.56; % from args
 % epsilon = 0.001; % from args
-q = 0.0111; % Started at 0.1 which was too large
+% q = 0.0111; % Started at 0.1 which was too large
+% q = 0.001; % from args
 
 % Generate the training data
 [points, groupName] = genTrainingDataMLPEKF(epochs, samples);
@@ -29,7 +36,11 @@ q = 0.0111; % Started at 0.1 which was too large
 % Create w, P, W, R, desiredOutput
 % NOTE numWeights assumes one output
 numWeights = numHiddenNodes*(numElements+2) + 1;
-w = randn(numWeights,1);
+if(useRandom)
+    w = randn(numWeights,1);
+else
+    w = initWeights(numWeights);
+end
 wSaved = zeros(epochs,numWeights);
 P = (1/epsilon)*eye(numWeights);
 Q = q*eye(numWeights);
@@ -37,6 +48,9 @@ R = (1/eta)*eye(samples);
 
 mlpOutput = zeros(epochs,samples);
 perf = zeros(epochs,1);
+if(plotPerf)
+    h = figure;
+end
 for k=1:epochs
     disp(['Training Epoch: ' num2str(k)]);
     % Save the current set of weights
@@ -53,8 +67,10 @@ for k=1:epochs
         Q,R );
     
     % Perform annealing on Q
-    if(Q(1,1) > 1e-6)
-        Q = Q*0.99;
+    if(doAnnealing)
+        if(Q(1,1) > 1e-6)
+            Q = Q*0.99;
+        end
     end
     
     % Get a measure of performance
@@ -62,6 +78,15 @@ for k=1:epochs
     perf(k) = getPerfMLP(w,numOutputs,false);
     disp(['Performance: ' num2str(perf(k)*100) '%']);
     
+    if(plotPerf)
+        % Plot the performance until now
+        figure(h);
+        plot(perf(1:k));
+        xlim([0 epochs]);
+        ylim([0 1]);
+        xlabel('Epochs');
+        ylabel('Performance');
+    end
 end
 
 endTime = datestr(now);
