@@ -74,7 +74,8 @@ if(plotAll)
                 xlabel('Epochs');
                 ylabel('Performance');
                 ylim([0 1]);
-                saveas(h,[perfFolder fileSep 'Figure' num2str(index,'%03.3d') '.png']);
+                saveas(h,[perfFolder fileSep 'Figure' num2str(index,'%04.4d') '.png']);
+                saveas(h,[perfFolder fileSep 'Figure' num2str(index,'%04.4d') '.fig']);
                 index = index + 1;
             end
         end
