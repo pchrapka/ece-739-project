@@ -1,4 +1,4 @@
-function [ perf ] = runEKFMLP2( epochs, samples, numHiddenNodes, eta, epsilon )
+function [ perf,w ] = runEKFMLP2( epochs, samples, numHiddenNodes, eta, epsilon )
 %RUNEKFMLP2 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -9,17 +9,17 @@ startTime = datestr(now);
 numElements = 2;
 
 % Training configuration
-% epochs = 500;
-% samples = 200;
+% epochs = 500; % from args
+% samples = 200; % from args
 
 % Network configuration
 numOutputs = 1;
-% numHiddenNodes = 50;
+% numHiddenNodes = 50; % from args
 
 % Network parameters
-% eta = 0.56;
-% epsilon = 0.001;
-q = 0.0111;
+% eta = 0.56; % from args
+% epsilon = 0.001; % from args
+q = 0.0111; % Started at 0.1 which was too large
 
 % Generate the training data
 [points, groupName] = genTrainingDataMLPEKF(epochs, samples);
@@ -39,6 +39,7 @@ mlpOutput = zeros(epochs,samples);
 perf = zeros(epochs,1);
 for k=1:epochs
     disp(['Training Epoch: ' num2str(k)]);
+    % Save the current set of weights
     wSaved(k,:) = w;
     % Randomly select training and test sets
     % [train, test] = crossvalind('holdOut',groups);
@@ -57,7 +58,8 @@ for k=1:epochs
     end
     
     % Get a measure of performance
-    perf(k) = getPerfMLP(w,numOutputs);
+    % TODO may need to fix this to get mean squared error
+    perf(k) = getPerfMLP(w,numOutputs,false);
     disp(['Performance: ' num2str(perf(k)*100) '%']);
     
 end
