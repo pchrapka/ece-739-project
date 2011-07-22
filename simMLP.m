@@ -4,7 +4,7 @@ function output = simMLP( w,x,numOutputs )
 %   and the output layer as well as biases at each node.
 %   Should work with more than one output and multiple samples in x
 %   X should be a number of elements x number of samples matrix
-
+%
 % Evaluates the neural network using the weights and provided input
 %   OUT = SIMNN(W,X)
 %   Evalutes the input for each neuron input = w*x
