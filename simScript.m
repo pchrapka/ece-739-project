@@ -2,10 +2,24 @@ clc;
 clear all;
 close all;
 
-optimizeQR
+%% Initialize variables
+samples = 10;
+epochs = 500;
+testSamples = 200;
+eta = 0.556;
+epsilon = 0.005;
+q = 0.001;
+HN = 100;
+annealingFlag = true;
+perfPlotFlag = true;
 
-runSVM(100*200, 500);
+%% Run the EKF MLP alg
 
-runSVM(100*200, 100);
-
-runSVM(100*200, 2500);
+[perf,weights] = runEKFMLP2(...
+                epochs,testSamples,...
+                HN, eta, epsilon, q, ...
+                annealingFlag, perfPlotFlag);
+            
+%% Test the network and output a plot
+numOutputs = 1;
+perf2 = getPerfMLP( weights, numOutputs, true );

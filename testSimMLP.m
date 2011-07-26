@@ -1,4 +1,7 @@
-x = [0.1 0.1 0.4; 0.7 -0.4 -0.1];
+clear all;
+
+x1 = [0.3; 0.5];
+x3 = [0.1 0.1 0.4; 0.7 -0.4 -0.1];
 
 % Test 1 output
 numOutputs = 1;
@@ -12,4 +15,4 @@ w = (0.01:0.01:0.17)';
 % numOutputs = 3;
 % w = (0.01:0.01:0.27)';
 
-output = simMLP(w,x,numOutputs);
+output = simMLP(w,x3,numOutputs);

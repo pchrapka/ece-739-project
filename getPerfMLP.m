@@ -60,7 +60,6 @@ if(plotOutput)
     hold off;
     saveas(h,[saveFolder filesep 'Classification Performance' '.png']);
     saveas(h,[saveFolder filesep 'Classification Performance' '.fig']);
-    close(h);
     
     % Create a 3D scatter plot
     figure;

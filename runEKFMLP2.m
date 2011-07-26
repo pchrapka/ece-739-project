@@ -5,7 +5,7 @@ function [ perf,w ] = runEKFMLP2( epochs, samples, numHiddenNodes, eta, epsilon,
 % OPTIONS
 % Flag to use a random initial weight vector
 % Otherwise loads weights from a file
-useRandom = false;
+useRandom = true;%false;
 % doAnnealing = true; % from args
 
 % Record the starting time
@@ -71,7 +71,6 @@ for k=1:epochs
     end
     
     % Get a measure of performance
-    % TODO may need to fix this to get mean squared error
     perf(k) = getPerfMLP(w,numOutputs,false);
     disp(['Performance: ' num2str(perf(k)*100) '%']);
     
