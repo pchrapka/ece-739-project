@@ -51,11 +51,26 @@ if(plotOutput)
         20,[0 0 0],...
         'Marker','x');
     title('Classified data');
-    legend(...
-        'Correct red points',...
-        'Correct black points',...
-        'Incorrect red points',...
-        'Incorrect black points');
+    
+    % Construct legend string
+    ind1 = 1;
+    if(sum(redPointsCorrect) ~= 0)
+        legendString{ind1} = 'Correct red points';
+        ind1 = ind1 + 1;
+    end
+    if(sum(blackPointsCorrect) ~= 0)
+        legendString{ind1} = 'Correct black points';
+        ind1 = ind1 + 1;
+    end
+    if(sum(redPointsIncorrect) ~= 0)
+        legendString{ind1} = 'Incorrect red points';
+        ind1 = ind1 + 1;
+    end
+    if(sum(blackPointsIncorrect) ~= 0)
+        legendString{ind1} = 'Incorrect black points';
+    end
+    legend(legendString);
+    
     axis square;
     hold off;
     saveas(h,[saveFolder filesep 'Classification Performance' '.png']);
