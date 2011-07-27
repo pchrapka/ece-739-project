@@ -39,16 +39,12 @@ numOutputs = 1;
 numWeights = numHiddenNodes*(numElements+2) + 1;
 if(useRandom)
     w = randn(numWeights,1);
-    if(preProcessData)
-        % Make the weight vector zero mean
-        w = w - mean(w);
-    end
+    % Make the weight vector zero mean
+    w = w - mean(w);
 else
     w = initWeights(numWeights);
-    if(preProcessData)
-        % Make the weight vector zero mean
-        w = w - mean(w);
-    end
+    % Make the weight vector zero mean
+    w = w - mean(w);
 end
 % wSaved = zeros(epochs,numWeights);
 P = (1/epsilon)*eye(numWeights);
