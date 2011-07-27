@@ -4,14 +4,14 @@ close all;
 
 %% Initialize variables
 samples = 10;
-epochs = 500;
+epochs = 10;%500;
 testSamples = 200;
 eta = 0.556;
 epsilon = 0.005;
 q = 0.001;
 HN = 100;
 annealingFlag = true;
-perfPlotFlag = true;
+perfPlotFlag = false;
 
 %% Run the EKF MLP alg
 

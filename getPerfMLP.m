@@ -1,4 +1,4 @@
-function [ perf ] = getPerfMLP( w, numOutputs, plotOutput )
+function [ perf ] = getPerfMLP( w, numOutputs, plotOutput, preProcessData )
 %GETPERFMLP Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -10,7 +10,16 @@ samples = 1000;
 % Get more information about the training data
 [desiredOutput, redPoints, blackPoints] = separateDataMLPEKF(groupName);
 
-mlpOutput = simMLP(w,squeeze(testPoints(1,:,:)),numOutputs);
+curTestData = squeeze(testPoints(1,:,:));
+if(preProcessData)
+    % Normalize the test data
+    curTestData(1,:) = (curTestData(1,:) - mean(curTestData(1,:)))...
+        /std(curTestData(1,:));
+    curTestData(2,:) = (curTestData(2,:) - mean(curTestData(2,:)))...
+        /std(curTestData(2,:));
+end
+
+mlpOutput = simMLP(w,curTestData,numOutputs);
 
 redPointsAfter = (mlpOutput >= 0);
 blackPointsAfter = (mlpOutput < 0);

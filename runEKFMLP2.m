@@ -7,6 +7,7 @@ function [ perf,w ] = runEKFMLP2( epochs, samples, numHiddenNodes, eta, epsilon,
 % Otherwise loads weights from a file
 useRandom = true;%false;
 % doAnnealing = true; % from args
+preProcessData = true;
 
 % Record the starting time
 startTime = datestr(now);
@@ -38,8 +39,16 @@ numOutputs = 1;
 numWeights = numHiddenNodes*(numElements+2) + 1;
 if(useRandom)
     w = randn(numWeights,1);
+    if(preProcessData)
+        % Make the weight vector zero mean
+        w = w - mean(w);
+    end
 else
     w = initWeights(numWeights);
+    if(preProcessData)
+        % Make the weight vector zero mean
+        w = w - mean(w);
+    end
 end
 % wSaved = zeros(epochs,numWeights);
 P = (1/epsilon)*eye(numWeights);
@@ -52,15 +61,26 @@ if(plotPerf)
     h = figure;
 end
 for k=1:epochs
-    disp(['Training Epoch: ' num2str(k)]);
+    % disp(['Training Epoch: ' num2str(k)]);
+    
+    curTestData = squeeze(points(k,:,:));
+    curDesiredOutput = squeeze(desiredOutput(k,:));
+    if(preProcessData)
+        % Normalize the test data
+        curTestData(1,:) = (curTestData(1,:) - mean(curTestData(1,:)))...
+            /std(curTestData(1,:));
+        curTestData(2,:) = (curTestData(2,:) - mean(curTestData(2,:)))...
+            /std(curTestData(2,:));
+    end
+    
     % Save the current set of weights
     % wSaved(k,:) = w;
     
     % Train the MLP using the Extended Kalman Filter
     [ w,P,mlpOutput(k,:) ] = trainEKF( ...
         w,P,...
-        squeeze(points(k,:,:)),...
-        squeeze(desiredOutput(k,:)),...
+        curTestData,...
+        curDesiredOutput,...
         Q,R );
     
     % Perform annealing on Q
@@ -71,8 +91,8 @@ for k=1:epochs
     end
     
     % Get a measure of performance
-    perf(k) = getPerfMLP(w,numOutputs,false);
-    disp(['Performance: ' num2str(perf(k)*100) '%']);
+    perf(k) = getPerfMLP(w,numOutputs,false,preProcessData);
+    % disp(['Performance: ' num2str(perf(k)*100) '%']);
     
     if(plotPerf)
         % Plot the performance until now
