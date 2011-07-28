@@ -7,7 +7,7 @@ function [ perf,w ] = runEKFMLP2( epochs, samples, numHiddenNodes, eta, epsilon,
 % Otherwise loads weights from a file
 useRandom = true;%false;
 % doAnnealing = true; % from args
-preProcessData = true;
+preProcessData = false;
 
 % Record the starting time
 startTime = datestr(now);
