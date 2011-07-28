@@ -60,7 +60,7 @@ for k=1:epochs
     end
     
     % Get a measure of performance
-    perf(k) = getPerfMLP(w,numOutputs);
+    perf(k) = getPerfMLP(w,numOutputs,false);
     disp(['Performance: ' num2str(perf(k)*100) '%']);
     
 end

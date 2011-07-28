@@ -1,4 +1,4 @@
-function [ perf ] = getPerfMLP( w,numOutputs )
+function [ perf ] = getPerfMLP( w, numOutputs, plotOutput, preProcessData )
 %GETPERFMLP Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -10,7 +10,16 @@ samples = 1000;
 % Get more information about the training data
 [desiredOutput, redPoints, blackPoints] = separateDataMLPEKF(groupName);
 
-mlpOutput = simMLP(w,squeeze(testPoints(1,:,:)),numOutputs);
+curTestData = squeeze(testPoints(1,:,:));
+if(preProcessData)
+    % Normalize the test data
+    curTestData(1,:) = (curTestData(1,:) - mean(curTestData(1,:)))...
+        /std(curTestData(1,:));
+    curTestData(2,:) = (curTestData(2,:) - mean(curTestData(2,:)))...
+        /std(curTestData(2,:));
+end
+
+mlpOutput = simMLP(w,curTestData,numOutputs);
 
 redPointsAfter = (mlpOutput >= 0);
 blackPointsAfter = (mlpOutput < 0);
@@ -19,6 +28,83 @@ correct = logical(redPointsAfter & redPoints) + logical(blackPointsAfter & black
 % incorrect = logical(blackPointsAfter & blackPoints);
 
 perf = sum(correct)/samples;
+
+if(plotOutput)
+    saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\EKF MLP';
+    h = figure;
+    redPointsCorrect = logical(redPointsAfter & redPoints);
+    scatter(...
+        testPoints(1,1,redPointsCorrect),...
+        testPoints(1,2,redPointsCorrect),...
+        20,[1 0 0],...
+        'Marker','+');
+    hold on;
+    blackPointsCorrect = logical(blackPointsAfter & blackPoints);
+    scatter(...
+        testPoints(1,1,blackPointsCorrect),...
+        testPoints(1,2,blackPointsCorrect),...
+        20,[0 0 0],...
+        'Marker','+');
+    hold on;
+    redPointsIncorrect = ~redPointsCorrect & redPoints;
+    scatter(...
+        testPoints(1,1,redPointsIncorrect),...
+        testPoints(1,2,redPointsIncorrect),...
+        20,[1 0 0],...
+        'Marker','x');
+    hold on;
+    blackPointsIncorrect = ~blackPointsCorrect & blackPoints;
+    scatter(...
+        testPoints(1,1,blackPointsIncorrect),...
+        testPoints(1,2,blackPointsIncorrect),...
+        20,[0 0 0],...
+        'Marker','x');
+    title('Classified data');
+    
+    % Construct legend string
+    ind1 = 1;
+    if(sum(redPointsCorrect) ~= 0)
+        legendString{ind1} = 'Correct red points';
+        ind1 = ind1 + 1;
+    end
+    if(sum(blackPointsCorrect) ~= 0)
+        legendString{ind1} = 'Correct black points';
+        ind1 = ind1 + 1;
+    end
+    if(sum(redPointsIncorrect) ~= 0)
+        legendString{ind1} = 'Incorrect red points';
+        ind1 = ind1 + 1;
+    end
+    if(sum(blackPointsIncorrect) ~= 0)
+        legendString{ind1} = 'Incorrect black points';
+    end
+    legend(legendString);
+    
+    axis square;
+    hold off;
+    saveas(h,[saveFolder filesep 'Classification Performance' '.png']);
+    saveas(h,[saveFolder filesep 'Classification Performance' '.fig']);
+    
+    % Create a 3D scatter plot
+    figure;
+    x = squeeze(testPoints(1,1,:));
+    y = squeeze(testPoints(1,2,:));
+    z = squeeze(mlpOutput)';
+    scatter3(x,y,z,10,z);
+    axis square;
+    view(2);
+    title('Output scatter plot of MLP EKF');
+    
+    figure;
+    x = squeeze(testPoints(1,1,:));
+    y = squeeze(testPoints(1,2,:));
+    z = squeeze(mlpOutput)';
+    tri = delaunay(x,y);
+    trisurf(tri,x,y,z);
+    hold on
+    axis square;
+    title('Output surface of MLP EKF');
+end
 
 end
 
