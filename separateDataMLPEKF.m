@@ -18,7 +18,8 @@ blackPoints = ismember(groupName,'black');
 
 % Generate the desired output
 % Make red = 0.7 and black = -0.7
-desiredOutput = redPoints*0.7 + blackPoints*-0.7;
+desiredValue = 1;
+desiredOutput = redPoints*desiredValue + blackPoints*-desiredValue;
 
 end
 
