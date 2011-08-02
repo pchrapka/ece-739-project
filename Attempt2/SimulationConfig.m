@@ -18,8 +18,9 @@ classdef SimulationConfig
         % Value for R
         r = 0;
         
-        % Array of performance values for each epoch
-        Performance
+        % MLP Configuration
+        MLPConfigObj
+        
         % Number of test points used
         NumTestPoints = 200;
         % Flag for plotting performance during the running simulation
@@ -32,9 +33,8 @@ classdef SimulationConfig
         FinalW = [];
         FinalP = [];
         Exception = [];
-        
-        % MLP Configuration
-        MLPConfigObj
+        % Array of performance values for each epoch
+        Performance
     end
     
     methods

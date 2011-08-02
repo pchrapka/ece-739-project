@@ -28,39 +28,21 @@ config4.SimFunc = @simMLP1Layer;
 
 config5 = MLPConfig();
 config5.NumHiddenLayers = 1;
-config5.NumHiddenNodes = [10];
+config5.NumHiddenNodes = [20];
 config5.SimFunc = @simMLP1Layer;
 
 config6 = MLPConfig();
 config6.NumHiddenLayers = 1;
-config6.NumHiddenNodes = [10];
+config6.NumHiddenNodes = [30];
 config6.SimFunc = @simMLP1Layer;
 
 %% Set all parameters to go through
 parameters{1} = {'DesiredOutputValue',[1 2 5 10],'',0};
 parameters{2} = {'q',[0.1 0.01 0.001],'',0};
 parameters{3} = {'DoAnnealing',[true false],'',0};
-parameters{4} = {'r',[100 200 500],'',0};
+parameters{4} = {'r',[1 10 100 200 500],'',0};
 parameters{5} = {'MLPConfigObj',...
     [config1 config2 config3 config4 config5 config6],'',0};
-
-%% Create a SimulationConfig object
-simObj = SimulationConfig();
-
-%% Initialize all the relevant variables
-simObj.NumEpochs = 500;
-simObj.NumPointsPerEpoch = 200;
-simObj.DesiredOutputValue = 1;
-simObj.p = 100;
-simObj.q = 0.001;
-simObj.r = 500;
-% Turn on performance plotting on the fly
-simObj.PlotPerf = false;
-%simObj.NumTestPoints = 200;
-%simObj.DoAnnealing = true;
-
-%% Initialize the SimulationConfig object
-simObj = simObj.Init();
 
 %% Create a folder
 
@@ -81,19 +63,34 @@ for i=1:length(parameters)
     parameters{i}{3} = char(counterIndex);
     counterIndex = counterIndex + 1;
 end
-fprintf(fid,'for A=1:length(parameters)\n');
+% Create a SimulationConfig object
+fprintf(fid,'%% Create a SimulationConfig object\n');
+fprintf(fid,'simObj = SimulationConfig();\n');
+% Initialize variables
+fprintf(fid,'%% Initialize variables\n');
+fprintf(fid,'simObj.NumEpochs = 500;\n');
+fprintf(fid,'simObj.NumPointsPerEpoch = 200;\n');
+fprintf(fid,'simObj.PlotPerf = false;\n');
+fprintf(fid,'simObj.p = 100;\n');
+% Initialize the SimulationConfig object
+fprintf(fid,'%% Initialize the SimulationConfig object\n');
+fprintf(fid,'simObj = simObj.Init();\n');
 % Write the meat of the script
+fprintf(fid,'%% Initialize the simulation parameters\n');
+fprintf(fid,'for A=1:length(parameters)\n');
 fprintf(fid,'simObj.(parameters{A}{1}) = parameters{A}{2}(eval(parameters{A}{3}));\n');
 fprintf(fid,'end\n');
 fprintf(fid,'disp([''Simulation '' num2str(simNumber)]);\n');
 fprintf(fid,'try\n');
-fprintf(fid,'%%%% Run the simulation\n');
+fprintf(fid,'%% Run the simulation\n');
 fprintf(fid,'simObj = runEKFMLPSimulation(simObj);\n');
 fprintf(fid,'catch ex\n');
+fprintf(fid,'%% Catch an exception if it occurs\n');
+fprintf(fid,'disp(''Caught an exception'');\n');
 fprintf(fid,'disp(ex);\n');
 fprintf(fid,'simObj.Exception = ex;\n');
 fprintf(fid,'end\n');
-fprintf(fid,'%%%% Save the workspace variables\n');
+fprintf(fid,'%% Save the workspace variables\n');
 fprintf(fid,'dateString = datestr(now,''yyyymmdd'');\n');
 fprintf(fid,'fileName = [''mlpekf_simulation'' dateString ''_'' num2str(simNumber,''%%5.5d'')];\n');
 fprintf(fid,'save([saveFolder filesep fileName],''simObj'');\n');
