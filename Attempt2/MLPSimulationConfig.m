@@ -1,5 +1,5 @@
-classdef SimulationConfig
-    %SIMULATIONCONFIG Summary of this class goes here
+classdef MLPSimulationConfig
+    %MLPSIMULATIONCONFIG Summary of this class goes here
     %   Detailed explanation goes here
     
     properties
@@ -38,7 +38,7 @@ classdef SimulationConfig
     end
     
     methods
-        function obj = SimulationConfig()
+        function obj = MLPSimulationConfig()
         end
         
         function obj = Init(obj)
