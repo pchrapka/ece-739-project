@@ -4,9 +4,9 @@ classdef MLPSimulationConfig
     
     properties
         % Number of epochs to run the simulation
-        NumEpochs = 0;
+        NumEpochs = 500;
         % Number of data samples per epoch
-        NumPointsPerEpoch = 0;
+        NumPointsPerEpoch = 200;
         % Desired output value (Red is +ve, Black is -ve)
         DesiredOutputValue = 0;
         
