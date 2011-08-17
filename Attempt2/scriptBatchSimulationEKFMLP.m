@@ -63,17 +63,17 @@ for i=1:length(parameters)
     parameters{i}{3} = char(counterIndex);
     counterIndex = counterIndex + 1;
 end
-% Create a SimulationConfig object
-fprintf(fid,'%% Create a SimulationConfig object\n');
-fprintf(fid,'simObj = SimulationConfig();\n');
+% Create a MLPSimulationConfig object
+fprintf(fid,'%% Create a MLPSimulationConfig object\n');
+fprintf(fid,'simObj = MLPSimulationConfig();\n');
 % Initialize variables
 fprintf(fid,'%% Initialize variables\n');
 fprintf(fid,'simObj.NumEpochs = 500;\n');
 fprintf(fid,'simObj.NumPointsPerEpoch = 200;\n');
 fprintf(fid,'simObj.PlotPerf = false;\n');
 fprintf(fid,'simObj.p = 100;\n');
-% Initialize the SimulationConfig object
-fprintf(fid,'%% Initialize the SimulationConfig object\n');
+% Initialize the MLPSimulationConfig object
+fprintf(fid,'%% Initialize the MLPSimulationConfig object\n');
 fprintf(fid,'simObj = simObj.Init();\n');
 % Write the meat of the script
 fprintf(fid,'%% Initialize the simulation parameters\n');

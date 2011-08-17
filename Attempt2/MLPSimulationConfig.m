@@ -1,12 +1,12 @@
-classdef SimulationConfig
-    %SIMULATIONCONFIG Summary of this class goes here
+classdef MLPSimulationConfig
+    %MLPSIMULATIONCONFIG Summary of this class goes here
     %   Detailed explanation goes here
     
     properties
         % Number of epochs to run the simulation
-        NumEpochs = 0;
+        NumEpochs = 500;
         % Number of data samples per epoch
-        NumPointsPerEpoch = 0;
+        NumPointsPerEpoch = 200;
         % Desired output value (Red is +ve, Black is -ve)
         DesiredOutputValue = 0;
         
@@ -38,7 +38,7 @@ classdef SimulationConfig
     end
     
     methods
-        function obj = SimulationConfig()
+        function obj = MLPSimulationConfig()
         end
         
         function obj = Init(obj)

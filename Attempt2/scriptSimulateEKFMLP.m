@@ -3,8 +3,8 @@ clear all;
 clc;
 close all;
 
-%% Create a SimulationConfig object
-simObj = SimulationConfig();
+%% Create a MLPSimulationConfig object
+simObj = MLPSimulationConfig();
 
 %% Initialize all the relevant variables
 simObj.NumEpochs = 500;
@@ -32,7 +32,7 @@ simObj.MLPConfigObj.SimFunc = @simMLP2Layer;
 % simObj.MLPConfigObj.NumHiddenNodes = [10];
 % simObj.MLPConfigObj.SimFunc = @simMLP1Layer;
 
-%% Initialize the SimulationConfig object
+%% Initialize the MLPSimulationConfig object
 simObj = simObj.Init();
 
 %% Run the simulation

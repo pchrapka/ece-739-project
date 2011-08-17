@@ -27,26 +27,26 @@ if(exist(plotDir,'dir') ~= 7)
 end
 
 %% Print out the simulations that had errors
-% disp('The following simulations had errors');
-% count = 0;
-% for i=1:length(simulations)
-%     if(~isempty(simulations{i}.Exception))
-%         disp(['Simulation: ' files(i).name]);
-%         disp(['  DesiredOutputValue: '...
-%             num2str(simulations{i}.DesiredOutputValue)]);
-%         disp(['  p: '...
-%             num2str(simulations{i}.p)]);
-%         disp(['  q: '...
-%             num2str(simulations{i}.q)]);
-%         disp(['  r: '...
-%             num2str(simulations{i}.r)]);
-%         disp(['  NumHiddenLayers: '...
-%             num2str(simulations{i}.MLPConfigObj.NumHiddenLayers)]);
-%         disp(['  NumHiddenNodes: '...
-%             num2str(simulations{i}.MLPConfigObj.NumHiddenNodes)]);
-%         count = count + 1;
-%     end
-% end
+disp('The following simulations had errors');
+count = 0;
+for i=1:length(simulations)
+    if(~isempty(simulations{i}.Exception))
+        disp(['Simulation: ' files(i).name]);
+        disp(['  DesiredOutputValue: '...
+            num2str(simulations{i}.DesiredOutputValue)]);
+        disp(['  p: '...
+            num2str(simulations{i}.p)]);
+        disp(['  q: '...
+            num2str(simulations{i}.q)]);
+        disp(['  r: '...
+            num2str(simulations{i}.r)]);
+        disp(['  NumHiddenLayers: '...
+            num2str(simulations{i}.MLPConfigObj.NumHiddenLayers)]);
+        disp(['  NumHiddenNodes: '...
+            num2str(simulations{i}.MLPConfigObj.NumHiddenNodes)]);
+        count = count + 1;
+    end
+end
 
 %% Calculate the final average performance
 tail = 20;
