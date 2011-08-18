@@ -76,7 +76,7 @@ if(simConfig.PlotPerformance)
     if(sum(blackPointsIncorrect) ~= 0)
         legendString{ind1} = 'Incorrect black points';
     end
-    legend(legendString,'Location','BestOutside');
+    legend(legendString,'Location','Best');
     
     axis square;
     hold off;
