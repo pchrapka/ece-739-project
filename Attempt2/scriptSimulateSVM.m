@@ -4,7 +4,8 @@ clc;
 close all;
 
 %% Initialize batch parameters 
-boxConstraint = [100 200 2500];
+%boxConstraint = [100 200 2500];
+boxConstraint = [500];
 
 %% Create a folder
 saveFolder = 'C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\SVM\';

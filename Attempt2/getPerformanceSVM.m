@@ -57,7 +57,10 @@ if(simConfig.PlotPerformance)
         testPoints(blackPointsIncorrect,2),...
         20,[0 0 0],...
         'Marker','x');
-    title('Classified data');
+    
+    xlabel('x');
+    ylabel('y');
+    title({'SVM Classified Data',['C = ' num2str(simConfig.BoxConstraint)]});
     
     % Construct legend string
     ind1 = 1;
@@ -76,7 +79,7 @@ if(simConfig.PlotPerformance)
     if(sum(blackPointsIncorrect) ~= 0)
         legendString{ind1} = 'Incorrect black points';
     end
-    legend(legendString,'Location','BestOutside');
+    legend(legendString,'Location','Best');
     
     axis square;
     hold off;
