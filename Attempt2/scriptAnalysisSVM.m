@@ -3,7 +3,7 @@
 %% Load the data
 
 data1 = load('C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\SVM\BatchSimulation_20110804_091422\svm_simulation_20110804_00001.mat');
-data2 = load('C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\SVM\BatchSimulation_20110804_091422\svm_simulation_20110804_00002.mat');
+data2 = load('C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\SVM\BatchSimulation_20110824_200440\svm_simulation_20110825_00001.mat');
 data3 = load('C:\Users\Phil\Documents\School\Masters\ECE 739 - Neural Networks\Project\SVM\BatchSimulation_20110804_091422\svm_simulation_20110806_00003.mat');
 
 %% Plot all three performance metrics

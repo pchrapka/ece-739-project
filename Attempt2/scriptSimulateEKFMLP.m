@@ -7,16 +7,16 @@ close all;
 simObj = MLPSimulationConfig();
 
 %% Initialize all the relevant variables
-simObj.NumEpochs = 500;
+simObj.NumEpochs = 200;
 simObj.NumPointsPerEpoch = 200;
 simObj.DesiredOutputValue = 10;
-simObj.p = 100;
+simObj.p = 10;
 simObj.q = 0.001;
-simObj.r = 500;
+simObj.r = 900;
 % Turn on performance plotting on the fly
-simObj.PlotPerf = true;
+simObj.PlotPerf = false;
 simObj.NumTestPoints = 200;
-simObj.DoAnnealing = true;
+simObj.DoAnnealing = false;
 
 %% Create an MLPConfig object
 simObj.MLPConfigObj = MLPConfig();
@@ -24,7 +24,7 @@ simObj.MLPConfigObj = MLPConfig();
 %% Initialize the MLPConfig object
 % Use 2 hidden layers
 simObj.MLPConfigObj.NumHiddenLayers = 2;
-simObj.MLPConfigObj.NumHiddenNodes = [10 3];
+simObj.MLPConfigObj.NumHiddenNodes = [24 8];
 simObj.MLPConfigObj.SimFunc = @simMLP2Layer;
 
 % Use 1 hidden layer
@@ -36,7 +36,9 @@ simObj.MLPConfigObj.SimFunc = @simMLP2Layer;
 simObj = simObj.Init();
 
 %% Run the simulation
+StartTime = datestr(now);
 simObj = runEKFMLPSimulation(simObj);
+EndTime = datestr(now);
 
 %% Get some performance plots
 simObj.PlotClassifiedData = true;
