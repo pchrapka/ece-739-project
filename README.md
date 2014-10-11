@@ -1,4 +1,4 @@
-ece-739-project
+ml-battle-project
 ===============
 
 Project for ECE 739 Neural Networks and Machine Learning Project lead by Dr. Simon Haykin. The corresponding report can be found in [ece-739-report](http://github.com/pchrapka/ece-739-report) repo.
